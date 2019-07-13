@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <set>
 
 using namespace std;
 
@@ -21,6 +22,7 @@ public:
     vector<vector<int>> threeSum(vector<int>& nums) {
         //vector<int> temp;
         vector<vector<int>> collect;
+        set<vector<int>> myset;
         sort(nums.begin(), nums.end());
         for(int i = 0; i < nums.size() - 2; i++)
         {
@@ -31,8 +33,12 @@ public:
                     if(nums[i] + nums[j] + nums[k] == 0)
                     {
                         vector<int> temp = {nums[i], nums[j], nums[k]};
-                        // sort(temp.begin(), temp.end());
-                        collect.push_back(temp);
+                        auto search = myset.find(temp);
+                        if(search == myset.end())
+                        {
+                            myset.insert(temp);
+                            collect.push_back(temp);
+                        }
                     }
                 }
             }
