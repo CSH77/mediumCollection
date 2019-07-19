@@ -5,52 +5,47 @@
 
 using namespace std;
 
-//Given an array nums of n integers, are there elements a, b, c in nums
-//such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
-/*
-Given array nums = [-1, 0, 1, 2, -1, -4],
-
-A solution set is:
-[
-  [-1, 0, 1],
-  [-1, -1, 2]
-]
- */
-
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        //vector<int> temp;
-        vector<vector<int>> collect;
-        set<vector<int>> myset;
-        sort(nums.begin(), nums.end());
+        if(nums.size() <= 2) return {};
+
+        vector<vector<int>>v;
+        sort(nums.begin(), nums.end()); // sort the numbers
+
         for(int i = 0; i < nums.size() - 2; i++)
         {
-            for(int j = i + 1; j < nums.size() - 1; j++)
+            if(i > 0 && nums[i] == nums[i-1])
+                continue; // to remove duplicates for ith candidate
+
+            int l = i+1, r = nums.size() - 1;
+            while(l < r)
             {
-                for(int k = j + 1; k < nums.size(); k++)
+                if(nums[i] + nums[l] + nums[r] == 0)
                 {
-                    if(nums[i] + nums[j] + nums[k] == 0)
-                    {
-                        vector<int> temp = {nums[i], nums[j], nums[k]};
-                        auto search = myset.find(temp);
-                        if(search == myset.end())
-                        {
-                            myset.insert(temp);
-                            collect.push_back(temp);
-                        }
-                    }
+                    v.push_back({nums[i], nums[l], nums[r]}); // will automatically contain only unique triplets
+                    l++;
+                    r--;
+                    while(l < r && nums[l] == nums[l-1])
+                        l++; // remove duplicates and move to right
+
+                    while(l < r && nums[r] == nums[r+1])
+                        r--; // remove duplicates and move to left
                 }
+                else if(nums[i] + nums[l] + nums[r] > 0)
+                    r--; // our sum exceeds 0, we will have to decrement 'r' so as to make the sum approach to 0
+                else
+                    l++; // our sum is less than 0, increment 'l' so as to make sum approach to 0
             }
         }
-
-        return collect;
+        return v;
     }
 };
 
 int main()
 {
     vector<int> input = {-1, 0, 1, 2, -1, -4};
+    // vector<int> input = {0};
 
     Solution obj;
     vector<vector<int>> vec = obj.threeSum(input);
