@@ -15,37 +15,53 @@ class Solution {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
 
-        set<ListNode*> listSet;
+        ListNode* iterA = headA;
+        ListNode* iterB = headB;
 
-        while(headA != NULL)
+        int sizeA = 0, sizeB = 0;
+
+        while(iterA != NULL)
         {
-            auto search = listSet.find(headA);
-            if(search != listSet.end()) //found it
-            {
-                return headA;
-            }
-            else
-            {
-                listSet.insert(headA);
-            }
-
-            headA = headA->next;
+            iterA = iterA->next;
+            sizeA++;
+        }
+        while(iterB != NULL)
+        {
+            iterB = iterB->next;
+            sizeB++;
         }
 
-        while(headB != NULL)
-        {
-            auto search = listSet.find(headB);
-            if(search != listSet.end()) //found it
-            {
-                return headB;
-            }
-            else
-            {
-                listSet.insert(headB);
-            }
+        iterA = headA;
+        iterB = headB;
 
-            headB = headB->next;
+        if(sizeA > sizeB)
+        {
+            int diff = sizeA - sizeB;
+
+            for(int i = 0; i < diff; i++)
+            {
+                iterA = iterA->next;
+            }
         }
+        else if(sizeA < sizeB)
+        {
+            int diff = sizeB - sizeA;
+
+            for(int i = 0; i < diff; i++)
+            {
+                iterB = iterB->next;
+            }
+        }
+
+        while(iterA != NULL && iterB != NULL)
+        {
+            if(iterA == iterB)
+                return iterA;
+
+            iterA = iterA->next;
+            iterB  = iterB->next;
+        }
+
         return NULL;
     };
 };
