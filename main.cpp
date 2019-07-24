@@ -1,6 +1,7 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -27,24 +28,28 @@ struct TreeNode {
 
 class Solution {
 public:
-    vector<int> numList;
-
-    void iter(TreeNode* node)
-    {
-        if(node == NULL)
-            return;
-
-        iter(node->left);
-        // cout << node->val;
-        numList.push_back(node->val);
-        iter(node->right);
-    }
+    stack<TreeNode*> stk;
+    vector<int> vec;
 
     vector<int> inorderTraversal(TreeNode* root) {
-        iter(root);
 
-        return numList;
+        TreeNode* node = root;
+        while(node != NULL  || !stk.empty())
+        {
+            while(node != NULL)
+            {
+                stk.push(node);
+                node = node->left;
+            }
+
+            node = stk.top();
+            stk.pop();
+            vec.push_back(node->val);
+            node = node->right;
+        }
+        return vec;
     }
+
 };
 
 int main()
