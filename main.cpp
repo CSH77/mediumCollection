@@ -47,23 +47,6 @@ public:
         // int visited[maxCol][maxRow];
         vector< vector<bool> > visited;
 
-        visited.resize(maxCol);
-        for( int i = 0; i < maxCol; i++)
-            visited[i].resize(maxRow);
-
-        for(int i = 0; i < grid.size(); i++)
-        {
-            for(int j = 0; j < grid[i].size(); j++)
-            {
-                if(grid[i][j] == '0')
-                    visited[i][j] = true;
-                else
-                    visited[i][j] = false;
-            }
-        }
-
-
-
         //BFS
         queue<Point> que;
 
@@ -72,31 +55,43 @@ public:
         {
             for(int j = 0; j < grid[i].size(); j++)
             {
-                if(!visited[i][j])
+                if(grid[i][j] == '1') //not visited
                 {
                     countIsland++;
                     que.push(Point(i,j));
                     while(!que.empty())
                     {
                         Point current = que.front();
-                        visited[current.col][current.row] = true;
                         que.pop();
+                        grid[current.col][current.row] = '0'; //mark as visited
 
                         //up
-                        if(current.col - 1 >= 0 && !visited[current.col - 1][current.row])
+                        if(current.col - 1 >= 0 && grid[current.col - 1][current.row] == '1')
+                        {
                             que.push(Point(current.col - 1, current.row));
+                            grid[current.col - 1][current.row] = '0';
+                        }
 
                         //down
-                        if(current.col + 1 < maxCol && !visited[current.col + 1][current.row])
+                        if(current.col + 1 < maxCol && grid[current.col + 1][current.row] == '1')
+                        {
                             que.push(Point(current.col + 1, current.row));
+                            grid[current.col + 1][current.row] = '0';
+                        }
 
                         //left
-                        if(current.row - 1 >= 0 && !visited[current.col][current.row - 1])
+                        if(current.row - 1 >= 0 && grid[current.col][current.row - 1] == '1')
+                        {
                             que.push(Point(current.col, current.row - 1 ));
+                            grid[current.col][current.row - 1] = '0';
+                        }
 
                         //right
-                        if(current.row + 1 < maxRow && !visited[current.col][current.row + 1])
+                        if(current.row + 1 < maxRow && grid[current.col][current.row + 1] == '1')
+                        {
                             que.push(Point(current.col, current.row + 1 ));
+                            grid[current.col][current.row + 1] = '0';
+                        }
                     }
                 }
             }
