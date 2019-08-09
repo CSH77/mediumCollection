@@ -28,85 +28,43 @@ Given word = "ABCB", return false.
 
 class Solution {
 public:
-    struct Point
+    bool exist(vector<vector<char>>& board, string word)
     {
-        char val;
-        int col;
-        int row;
-        Point(char v, int c, int r) : val(v), col(c), row(r){}
-    };
+        if(board.size()==0 || board[0].size()==0 )
+            return true;
 
-    bool exist(vector<vector<char>>& board, string word) {
-
-        //starting point.
-        int startIndex = 0;
-        char start = word[startIndex];
-        int next = 0;
-
-        int maxCol = board.size();
-        int maxRow = board[0].size();
-
-        int visited[maxCol][maxRow];
-        for(int i = 0; i < maxCol; i++)
+        for(int i=0; i<board.size(); i++)
         {
-            for(int j = 0; j < maxRow; j++)
-                visited[i][j] = 0;
-        }
-
-        for(int i = 0; i < board.size(); i++)
-        {
-            for(int j = 0; j < board[i].size(); j++)
+            for(int j=0; j<board[0].size(); j++)
             {
-                stack<Point> stk;
-                if(board[i][j] == start) //found starting point
-                {
-                    stk.push(Point(board[i][j], i, j));
-                    next = 0;
-                }
-
-                while(!stk.empty())
-                {
-                    if(stk.size() == word.size())
-                        return true;
-
-                    Point current = stk.top();
-                    stk.pop();
-                    next++;
-
-                    int val = current.val;
-                    int col = current.col;
-                    int row = current.row;
-                    visited[col][row] = 1;
-
-                    //up
-                    if(col - 1 >=0 && board[col - 1][row] == word[next] && visited[col - 1][row] == 0)
-                    {
-                        stk.push(current);
-                        stk.push( Point( board[col - 1][row], col - 1, row ) );
-                    }
-                    else if(col + 1 < maxCol && board[col + 1][row] == word[next] && visited[col + 1][row] == 0 ) //down
-                    {
-                        stk.push(current);
-                        stk.push( Point( board[col + 1][row], col + 1, row ) );
-                    }
-                    else if(row - 1 >= 0 && board[col][row - 1] == word[next] && visited[col][row - 1] == 0) //left
-                    {
-                        stk.push(current);
-                        stk.push( Point( board[col][row -1], col, row - 1 ) );
-                    }
-                    else if(row + 1 >= 0 && board[col][row + 1] == word[next] && visited[col][row + 1] == 0) //right
-                    {
-                        stk.push(current);
-                        stk.push( Point( board[col][row + 1], col, row + 1 ) );
-                    }
-                    else
-                        next--;
-                }//while
-            }//for
-        }//for
+                if(check(board, word, i, j))
+                    return true;
+            }
+        }
         return false;
+    }
 
-    }//EOF
+    bool check(vector<vector<char>>& board, string word, int i, int j){
+        if(word.length() == 0)
+            return true;
+
+        if(i < 0 || j < 0 || i >= board.size() || j>= board[0].size())
+            return false;
+
+        if(word[0] == board[i][j])
+        {
+            char c = word[0];
+            board[i][j]='\0';
+            if( check(board, word.substr(1), i+1, j)||
+                check(board, word.substr(1), i-1, j)||
+                check(board, word.substr(1), i, j+1)||
+                check(board, word.substr(1), i, j-1)
+              )
+                return true;
+            board[i][j] = c;
+        }
+        return false;
+    }
 };
 
 
@@ -120,14 +78,14 @@ int main()
         };
 
     // vector<vector<char>> board =
-    //     {
-    //         {'A'},
-    //     };
+        // {
+        //     {'A'},
+        // };
 
         string word = "ABCCED" ;   //return true.
         // string word = "SEE" ;   //return true.
-        // string word = "ABCB";   //eturn false.
-        // string word = "AB" ;   //return true.
+        // string word = "ABCB";   //return false.
+        //string word = "AB" ;   //return true.
 
 
         Solution obj;
