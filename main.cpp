@@ -9,30 +9,21 @@ public:
         vector<vector<int>> paths(m, vector<int>(n));
         paths[0][0] = 1; // init
 
-        for(size_t i = 1; i < m; i++)
-            { paths[i][0] += paths[i-1][0]; } // first row update
+        //initialize first row
+        for(int i = 0; i < paths[0].size(); i++)
+            paths[0][i] = 1;
 
-        for(size_t j = 1; j < n; j++)
-            { paths[0][j] += paths[0][j-1]; } // first col update
+        //initialize first col
+        for(int i = 0; i < paths.size(); i++)
+            paths[i][0]  = 1;
 
-        // for(vector<int> v : paths)
-        // {
-        //     for( int n : v)
-        //         cout << n << " ";
-        //     cout << endl;
-        // }
-        // cout << endl;
-
-        for(size_t i = 1; i < m; i++)
+        for(int i = 1; i < paths.size(); i++)
         {
-           for(size_t j = 1; j < n; j++)
-           {
-               paths[i][j] += paths[i-1][j] + paths[i][j-1];
-           }
+            for(int j = 1; j < paths[i].size(); j++)
+                paths[i][j] = paths[i - 1][j] + paths[i][j - 1];
         }
-        return paths[m-1][n-1];
 
-        // return -1;
+        return paths[paths.size() - 1][paths[0].size() - 1];
     }
 };
 
