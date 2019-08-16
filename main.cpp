@@ -6,23 +6,24 @@ using namespace std;
 class Solution {
 public:
     int lengthOfLIS( vector<int>& nums ) {
-        size_t size = nums.size();
-        if( size == 0 )
+        if(nums.size() < 1)
             return 0;
 
-        int longest = 1;
-        vector<int> lisLength( size, 1 );
+        vector<int> vec(nums.size(), 1);
 
-        for( int i = 0; i < size; i++ )
+        int longest = 1;
+        for(int i = 0; i < nums.size(); i++)
         {
-            for( int j = 0; j < i; j++ )
+            for(int j = 0; j < i; j++)
             {
-                if( nums[i] > nums[j] )
+                if(nums[i] > nums[j])
                 {
-                    lisLength[i] = max( lisLength[i], lisLength[j] + 1 );
+                    if(vec[i] < vec[j] + 1)
+                        vec[i] = vec[j] + 1;
+
+                    longest = max(vec[i], longest);
                 }
             }
-            longest = max( longest, lisLength[i] );
         }
         return longest;
     }
@@ -30,8 +31,8 @@ public:
 
 int main()
 {
-    vector<int> input = {10,9,2,5,3,7,101,18}; //expect 4   {2,3,7,101}
-    // vector<int> input = {3,4,-1, 0, 6, 2, 3}; //expect  4   {-1, 0, 2, 3}
+    // vector<int> input = {10,9,2,5,3,7,101,18}; //expect 4   {2,3,7,101}
+    vector<int> input = {3,4,-1, 0, 6, 2, 3}; //expect  4   {-1, 0, 2, 3}
 
     Solution obj;
     cout << obj.lengthOfLIS(input);
