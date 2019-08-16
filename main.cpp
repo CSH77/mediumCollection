@@ -5,19 +5,26 @@ using namespace std;
 
 class Solution {
 public:
-    int lengthOfLIS( vector<int> &nums ) {
-        set<int> lis;
-        for ( auto num : nums )
-        {
-            if( lis.count( num ) )
-                continue;
+    int lengthOfLIS( vector<int>& nums ) {
+        size_t size = nums.size();
+        if( size == 0 )
+            return 0;
 
-            lis.insert( num );
-            auto it = lis.upper_bound( num );
-            if( it != lis.end() )
-                lis.erase( it );
+        int longest = 1;
+        vector<int> lisLength( size, 1 );
+
+        for( int i = 0; i < size; i++ )
+        {
+            for( int j = 0; j < i; j++ )
+            {
+                if( nums[i] > nums[j] )
+                {
+                    lisLength[i] = max( lisLength[i], lisLength[j] + 1 );
+                }
+            }
+            longest = max( longest, lisLength[i] );
         }
-        return lis.size();
+        return longest;
     }
 };
 
