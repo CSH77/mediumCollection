@@ -16,75 +16,27 @@ struct Node
 
 class Solution {
 public:
-    Node* answer;
-    Node* head;
-
-    void traverseTree(Node* node)
-    {
-        if(node == NULL)
-            return;
-
-        cout << node->val << " ";
-        traverseTree(node->left);
-        traverseTree(node->right);
-    }
-
-    int treeHeight(Node* node)
-    {
-        if(node == NULL)
-            return 0;
-
-        int lHeight = treeHeight(node->left);
-        int rHeight = treeHeight(node->right);
-
-        if(lHeight > rHeight)
-            return lHeight + 1;
-        else
-            return rHeight + 1;
-    }
-
-    void printGivenLevel(Node* node, int level)
-    {
-        if(node == NULL)
-            return;
-
-        if(level == 1)
-        {
-            // cout << node->val << " ";
-            answer->next = node;
-            answer = answer->next;
-        }
-        else
-        {
-            printGivenLevel(node->left, level - 1);
-            printGivenLevel(node->right, level - 1);
-        }
-    }
-
     Node* connect(Node* root) {
+        if(root == NULL)
+            return NULL;
+        Node* head = root;
 
-
-        int height = treeHeight(root);
-
-        for(int i = 1; i <= height; i++)
+        while(root->left != NULL)
         {
-            answer = new Node(0);
-            head = answer;
+            Node* tmp = root;
+            while(tmp != NULL)
+            {
+                tmp->left->next = tmp->right;
+                if(tmp->next != NULL)
+                    tmp->right->next = tmp->next->left;
 
-            printGivenLevel(root, i);
-
-            Node* delNode;
-            delNode = head;
-            head = head->next;
-            delete delNode;
+                tmp = tmp->next;
+            }
+            root = root->left;
         }
-
-        return root;
-
+        return head;
     }
-
 };
-
 
 int main()
 {
@@ -114,18 +66,18 @@ int main()
     //obj.traverseTree(node1);
     Node* answer = obj.connect(node1);
 
-    answer = node2;
+    answer = node4;
     while(answer != NULL)
     {
         cout << answer->val << " ";
         answer = answer->next;
     }
 
-    while(answer != NULL)
-    {
-        cout << answer->val << " ";
-        answer = answer->next;
-    }
+    // while(answer != NULL)
+    // {
+    //     cout << answer->val << " ";
+    //     answer = answer->next;
+    // }
 
 
 
