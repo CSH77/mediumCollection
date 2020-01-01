@@ -17,114 +17,96 @@ struct TreeNode {
 
 class Solution {
 public:
-
-    //if right subtree is exist, min node of the right subtree is the successor
-    TreeNode* findMinNode(TreeNode* root)
-    {
-        if(!root)
-            return NULL;
-
-        TreeNode* node = root;
-        //find minimum node from right subtree
-        if(node->right)
-        {
-            //find minimum node
-            while(node->left)
-                node = node->left;
-        }
-        return node;
-    }
-
-    //if right subtree is not exist, find successor from top,
-    //if currentNode is bigger than given node, mark as successor
-    TreeNode* findSuccessorFromTop(TreeNode* root, TreeNode* node)
-    {
-        if(!node || !root)
-            return NULL;
-
-        TreeNode* current = root;
-        TreeNode* successor;
-
-        while(current)
-        {
-            if(node->val < current->val)
-            {
-                successor = current;
-                current = current->left;
-            }
-            else
-                current = current->right;
-        }
-
-        return successor;
-    }
-
-
     TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
-        //if right subtree is exist, find minimum node from right subtree
-        if(p->right)
-            return findMinNode(p);
-        else
-            return findSuccessorFromTop(root, p);
-    }
+        bool nextOneIsSuccesor = false;
 
-    void inOrder(TreeNode* root)
-    {
-        if(!root)
-            return;
+        //use inorder iteration, if current node is p,
+        //next node is successor,
 
-        TreeNode* node = root;
         stack<TreeNode*> stk;
-
-        while(node != NULL || !stk.empty())
+        TreeNode* node = root;
+        while(!stk.empty() || node != NULL)
         {
             while(node)
             {
                 stk.push(node);
                 node = node->left;
             }
+            //node is null at this point.
 
             node = stk.top();
             stk.pop();
-            cout << node->val << " ";
+
+            if(nextOneIsSuccesor)
+            {
+                // cout << "successor value: " << node->val << endl;
+                return node;
+            }
+
+            if(node->val == p->val) //next one is answer;
+            {
+                nextOneIsSuccesor = true;
+                // cout << "found node: " << node->val << endl;
+                // cout << "next node: " << node->right << endl;
+            }
+
             node = node->right;
         }
+
+        return NULL;
 
     }
 };
 
-
-
 int main()
 {
-    // TreeNode* node20 = new TreeNode(20);
-    // TreeNode* node8 = new TreeNode(8);
-    // TreeNode* node22 = new TreeNode(22);
-    // TreeNode* node4 = new TreeNode(4);
-    // TreeNode* node4 = new TreeNode(12);
-    // TreeNode* node10 = new TreeNode(10);
-    // TreeNode* node14 = new TreeNode(14);
 
-    shared_ptr<TreeNode> node20(new TreeNode(20));
-    shared_ptr<TreeNode> node8(new TreeNode(8));
-    shared_ptr<TreeNode> node22(new TreeNode(22));
-    shared_ptr<TreeNode> node4(new TreeNode(4));
-    shared_ptr<TreeNode> node12(new TreeNode(12));
-    shared_ptr<TreeNode> node10(new TreeNode(10));
-    shared_ptr<TreeNode> node14(new TreeNode(14));
+    //         5
+    //       /   \
+    //      3     6
+    //     / \
+    //    2   4
+    //   /
+    //  1
+    TreeNode* node5 = new TreeNode(5);
+    TreeNode* node3 = new TreeNode(3);
+    TreeNode* node6 = new TreeNode(6);
+    TreeNode* node2 = new TreeNode(2);
+    TreeNode* node4 = new TreeNode(4);
+    TreeNode* node1 = new TreeNode(1);
+    node5->left = node3;
+    node5->right = node6;
+    node3->left = node2;
+    node3->right = node4;
+    node2->left = node1;
 
-    node20->left = node8.get();
-    node20->right = node22.get();
-    node8->left = node4.get();
-    node8->right = node12.get();
-    node12->left = node10.get();
-    node12->right = node14.get();
+    // shared_ptr<TreeNode> node20(new TreeNode(20));
+    // shared_ptr<TreeNode> node8(new TreeNode(8));
+    // shared_ptr<TreeNode> node22(new TreeNode(22));
+    // shared_ptr<TreeNode> node4(new TreeNode(4));
+    // shared_ptr<TreeNode> node12(new TreeNode(12));
+    // shared_ptr<TreeNode> node10(new TreeNode(10));
+    // shared_ptr<TreeNode> node14(new TreeNode(14));
+
+    // node20->left = node8.get();
+    // node20->right = node22.get();
+    // node8->left = node4.get();
+    // node8->right = node12.get();
+    // node12->left = node10.get();
+    // node12->right = node14.get();
 
 
     Solution obj;
     // obj.inOrder(node20.get());
-    TreeNode* node = obj.inorderSuccessor(node20.get(), node14.get() );
-    cout << node->val << endl;
+    // TreeNode* node = obj.inorderSuccessor(node20.get(), node14.get() );
+
+    TreeNode* root = node5;
+    TreeNode* node = obj.inorderSuccessor(root, node6);
+
+    if(node)
+        cout << node->val << endl;
+    else
+        cout << "NULL" << endl;
 
 
     return 0;
