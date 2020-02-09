@@ -19,22 +19,22 @@ public:
     Node* connect(Node* root) {
         if(root == NULL)
             return NULL;
-        Node* head = root;
 
-        while(root->left != NULL)
+        Node* node = root;
+        while(node->left != NULL)
         {
-            Node* tmp = root;
-            while(tmp != NULL)
+            Node* temp = node;
+            while(temp)
             {
-                tmp->left->next = tmp->right;
-                if(tmp->next != NULL)
-                    tmp->right->next = tmp->next->left;
+                temp->left->next = temp->right;
+                if(temp->next)
+                    temp->right->next = temp->next->left;
 
-                tmp = tmp->next;
+                temp = temp->next;
             }
-            root = root->left;
+            node = node->left;
         }
-        return head;
+        return root;
     }
 };
 

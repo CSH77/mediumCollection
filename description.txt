@@ -16,7 +16,7 @@ Initially, all next pointers are set to NULL.
 
             //Node
                  1
-                / \
+               /   \
               2     3
              / \   / \
             4   5 6   7
