@@ -1,6 +1,7 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -13,8 +14,34 @@ struct TreeNode {
 
 class Solution {
 public:
-    bool isSymmetric(TreeNode* root) {
 
+    bool isSymmetric(TreeNode* root) {
+        queue<TreeNode*> que;
+        que.push(root);
+        que.push(root);
+
+        while(!que.empty())
+        {
+            TreeNode* left = que.front();
+            que.pop();
+            TreeNode* right = que.front();
+            que.pop();
+
+            if(left == NULL && right == NULL)
+                continue;
+
+            if(left == NULL || right == NULL)
+                return false;
+
+            if(left->val != right->val)
+                return false;
+
+            que.push(left->left);
+            que.push(right->right);
+            que.push(left->right);
+            que.push(right->left);
+        }
+        return true;
     }
 };
 
@@ -34,6 +61,10 @@ int main()
     node2->right = node5;
     node3->left = node6;
     node3->right = node7;
+
+    Solution obj;
+    cout << obj.isSymmetric(node1);
+
 
     return 0;
 }
