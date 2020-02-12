@@ -14,34 +14,24 @@ struct TreeNode {
 
 class Solution {
 public:
+    bool helper(TreeNode* left, TreeNode* right)
+    {
+        if(left == NULL && right == NULL)
+            return true;
+
+        if(left && right && left->val == right->val)
+        {
+            return helper(left->left, right->right)
+                 && helper(left->right, right->left);
+        }
+
+        return false;
+
+    }
 
     bool isSymmetric(TreeNode* root) {
-        queue<TreeNode*> que;
-        que.push(root);
-        que.push(root);
 
-        while(!que.empty())
-        {
-            TreeNode* left = que.front();
-            que.pop();
-            TreeNode* right = que.front();
-            que.pop();
-
-            if(left == NULL && right == NULL)
-                continue;
-
-            if(left == NULL || right == NULL)
-                return false;
-
-            if(left->val != right->val)
-                return false;
-
-            que.push(left->left);
-            que.push(right->right);
-            que.push(left->right);
-            que.push(right->left);
-        }
-        return true;
+        return helper(root,root);
     }
 };
 
