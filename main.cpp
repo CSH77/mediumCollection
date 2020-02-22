@@ -15,55 +15,66 @@ using namespace std;
 
 class Solution {
 public:
-    ListNode* head;
-    void deleteNode(ListNode* node) {
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        // ListNode* p1 = head;
+        // ListNode* p2 = head;
 
         ListNode* cur = head;
-        ListNode* prev = cur;
-        ListNode* next = cur;
+        ListNode* next = NULL;
+        ListNode* prev = head;
 
-        ListNode* deleteNode = NULL;
-
+        int indexCount = 0;
+        //get endIndex
         while(cur)
         {
-            if(cur == node)
-            {
-                deleteNode = cur;
-                next = cur->next;
-
-                prev->next = next;
-                delete deleteNode;
-                break;
-            }
+            cur = cur->next;
+            indexCount++;
+        }
+        cur = head;
+        int targetCount = indexCount - n;
+        int currentIndexCount = 0;
+        while(currentIndexCount < targetCount)
+        {
             prev = cur;
             cur = cur->next;
+            currentIndexCount++;
         }
+        ListNode* deleteNode = NULL;
+
+        if(cur == head) //if head needs to be deleted
+        {
+            deleteNode = cur;
+            cur = cur->next;
+            head = cur;
+            delete deleteNode;
+        }
+        else
+        {
+            deleteNode = cur;
+            prev->next = cur->next;
+            delete deleteNode;
+        }
+
+        return head;
+
     }
 };
-
 int main()
 {
-    vector<int> nodeVal = {4,5,1,9};
 
-    //create linkedList
-    ListNode* node = new ListNode(0);
-    ListNode* head = node;
-    ListNode* targetNode = NULL;
-    int delNodeVal = 5; //delete node 5;
+    vector<int> nodeValues = {1,2,3,4,5};
 
-    for(auto n : nodeVal)
+    ListNode* head = new ListNode(0);
+    ListNode* node = head;
+
+    for(auto n : nodeValues)
     {
         node->next = new ListNode(n);
         node = node->next;
-        if(n == delNodeVal)
-            targetNode = node;
     }
 
     node = head;
-    ListNode* delNode = node;
     node = node->next;
-    head = node;
-    delete delNode;
 
     while(node)
     {
@@ -71,12 +82,12 @@ int main()
         node = node->next;
     }
     cout << endl;
+
     node = head;
+    node = node->next;
 
-    //delete node 5;
     Solution obj;
-    obj.head = node;
-    obj.deleteNode(targetNode);
+    node = obj.removeNthFromEnd(node, 2);
 
     while(node)
     {
@@ -84,6 +95,8 @@ int main()
         node = node->next;
     }
     cout << endl;
+
+
 
     return 0;
 }
