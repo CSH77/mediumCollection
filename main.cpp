@@ -17,42 +17,45 @@ using namespace std;
 
 class Solution {
 public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        //two pointer method,
-        ListNode* head = new ListNode(0);
+    bool isPalindrome(ListNode* head) {
+        if(!head)
+            return true;
+
+        if(!head->next)
+            return true;
+
+        int numNodes = 0;
         ListNode* cur = head;
-
-        while(l1 && l2)
+        while(cur)
         {
-            if(l1->val <= l2->val)
-            {
-                cur->next = l1;
-                l1 = l1->next;
-            }
-            else
-            {
-                cur->next = l2;
-                l2 = l2->next;
-            }
+            numNodes++;
             cur = cur->next;
         }
 
-        while(l1)
+        cur = head;
+        stack<ListNode*> stk;
+        int currentIndex = 0;
+        while(currentIndex < numNodes / 2)
         {
-            cur->next = l1;
-            l1 = l1->next;
+            stk.push(cur);
+            currentIndex++;
             cur = cur->next;
         }
 
-        while(l2)
+        if(numNodes % 2 != 0) //if odd number of nodes, skip one to ignore to compare middle node
+            cur = cur->next;
+
+        //compare
+        while(cur)
         {
-            cur->next = l2;
-            l2 = l2->next;
+            int numToCompare = stk.top()->val;
+            stk.pop();
+            if(numToCompare != cur->val)
+                return false;
+
             cur = cur->next;
         }
-
-        return head->next;
-
+        return true;
     }
 };
 
@@ -60,33 +63,33 @@ int main()
 {
     ListNode* l1 = new ListNode(0);
     ListNode* cur = l1;
+
     cur->next = new ListNode(1);
     cur = cur->next;
-    cur->next = new ListNode(2);
+    cur->next = new ListNode(0);
     cur = cur->next;
-    cur->next = new ListNode(4);
-    cur = cur->next;
+    // cur->next = new ListNode(1);
+    // cur = cur->next;
 
     ListNode* l2 = new ListNode(0);
     cur = l2;
     cur->next = new ListNode(1);
     cur = cur->next;
-    cur->next = new ListNode(3);
+    cur->next = new ListNode(2);
     cur = cur->next;
-    cur->next = new ListNode(4);
+    cur->next = new ListNode(2);
+    cur = cur->next;
+    cur->next = new ListNode(1);
     cur = cur->next;
 
     l1 = l1->next;
     l2 = l2->next;
 
     Solution obj;
-    ListNode* answer = obj.mergeTwoLists(l1, l2);
+    cout << obj.isPalindrome(l1); //false ;
+    // cout << obj.isPalindrome(l2); //true ;
 
-    while(answer)
-    {
-        cout << answer->val << " ";
-        answer = answer->next;
-    }
+
 
     return 0;
 }
