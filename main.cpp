@@ -17,32 +17,41 @@ struct TreeNode {
 
 class Solution {
 public:
-    int maxDepth(TreeNode* root) {
-        if(!root)
-            return 0;
+    bool check(TreeNode* node, TreeNode* min, TreeNode* max)
+    {
+        if(!node)
+            return true;
 
-        int left = maxDepth(root->left);
-        int right = maxDepth(root->right);
+        if(min != NULL && min->val >= node->val)
+            return false;
 
-        return left > right ? left + 1 : right + 1;
+        if(max != NULL && max->val <= node->val)
+            return false;
+
+        return check(node->left, min, node ) && check(node->right, node, max);
+    }
+
+
+    bool isValidBST(TreeNode* root) {
+        return check(root, NULL, NULL);
     }
 };
 
 int main()
 {
+    TreeNode* node5 = new TreeNode(5);
+    TreeNode* node1 = new TreeNode(1);
+    TreeNode* node4 = new TreeNode(4);
     TreeNode* node3 = new TreeNode(3);
-    TreeNode* node9 = new TreeNode(9);
-    TreeNode* node20 = new TreeNode(20);
-    TreeNode* node15 = new TreeNode(15);
-    TreeNode* node7 = new TreeNode(7);
+    TreeNode* node6 = new TreeNode(6);
 
-    node3->left = node9;
-    node3->right = node20;
-    node20->left = node15;
-    node20->right = node7;
+    node5->left = node1;
+    node5->right = node4;
+    node4->left = node3;
+    node4->right = node6;
 
     Solution obj;
-    cout << obj.maxDepth(node3) << endl;
+    cout << obj.isValidBST(node3) << endl;
 
     return 0;
 }
