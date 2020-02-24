@@ -3,6 +3,8 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
+#include <stack>
+
 using namespace std;
 
 struct TreeNode
@@ -15,53 +17,30 @@ struct TreeNode
 
 class Solution {
 public:
-    void preOrder(int count, vector<vector<int>>& v, queue<TreeNode*> que)
-    {
-        if(!que.empty())
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> answer;
+        if(!root)
+            return answer;
+
+        stack<TreeNode*> stk;
+        TreeNode* node = root;
+        // stk.push(node);
+
+        while(!stk.empty() || node != NULL)
         {
-            queue<TreeNode*> q1;
-            vector<int> tempVec;
-
-            while(!que.empty())
+            while(node)
             {
-                TreeNode* node = que.front();
-                tempVec.push_back(node->val);
-                que.pop();
-
-                if(node->left != NULL)
-                    q1.push(node->left);
-
-                if(node->right != NULL)
-                    q1.push(node->right);
+                stk.push(node);
+                // cout << node->val << " " ; //preorder print here.
+                node = node->left;
             }
 
-            if(count % 2 != 0) //reverse output
-            {
-                reverse(tempVec.begin(), tempVec.end());
-                v.push_back(tempVec);
-            }
-            else
-            {
-                v.push_back(tempVec);
-            }
-
-            preOrder(count + 1, v, q1);
+            //node is NULL at this point
+            node = stk.top();
+            cout << node->val << " " ; //inorder print here
+            stk.pop();
+            node = node->right;
         }
-
-    }
-
-    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-
-        vector<vector<int>> v;
-        if(root != NULL)
-        {
-            queue<TreeNode*> que;
-            que.push(root);
-            preOrder(0, v, que);
-        }
-
-        return v;
-
     }
 };
 
@@ -79,16 +58,16 @@ int main()
     node20->right = node7;
 
     Solution obj;
-    vector<vector<int>> answer = obj.zigzagLevelOrder(node3);
+    vector<vector<int>> answer = obj.levelOrder(node3);
 
-    for(vector<int> v : answer)
-    {
-        for(int n : v)
-        {
-            cout << n << " ";
-        }
-        cout << endl;
-    }
+    // for(vector<int> v : answer)
+    // {
+    //     for(int n : v)
+    //     {
+    //         cout << n << " ";
+    //     }
+    //     cout << endl;
+    // }
 
 
     return 0;
