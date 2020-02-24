@@ -3,6 +3,8 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
+#include <stack>
+
 using namespace std;
 
 struct TreeNode
@@ -15,53 +17,41 @@ struct TreeNode
 
 class Solution {
 public:
-    void preOrder(int count, vector<vector<int>>& v, queue<TreeNode*> que)
+    void levelOrderHelper(vector<vector<int>>& answer, queue<TreeNode*> que)
     {
-        if(!que.empty())
+        if(que.empty())
+            return;
+
+        vector<int> levelValue;
+        queue<TreeNode*> levelQue;
+        while(!que.empty())
         {
-            queue<TreeNode*> q1;
-            vector<int> tempVec;
+            TreeNode* cur = que.front();
+            que.pop();
+            levelValue.push_back(cur->val);
 
-            while(!que.empty())
-            {
-                TreeNode* node = que.front();
-                tempVec.push_back(node->val);
-                que.pop();
+            if(cur->left)
+                levelQue.push(cur->left);
 
-                if(node->left != NULL)
-                    q1.push(node->left);
-
-                if(node->right != NULL)
-                    q1.push(node->right);
-            }
-
-            if(count % 2 != 0) //reverse output
-            {
-                reverse(tempVec.begin(), tempVec.end());
-                v.push_back(tempVec);
-            }
-            else
-            {
-                v.push_back(tempVec);
-            }
-
-            preOrder(count + 1, v, q1);
+            if(cur->right)
+                levelQue.push(cur->right);
         }
+
+        answer.push_back(levelValue);
+        levelOrderHelper(answer, levelQue);
 
     }
 
-    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
 
-        vector<vector<int>> v;
-        if(root != NULL)
-        {
-            queue<TreeNode*> que;
-            que.push(root);
-            preOrder(0, v, que);
-        }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> answer;
+        if(!root)
+            return answer;
 
-        return v;
-
+        queue<TreeNode*> que;
+        que.push(root);
+        levelOrderHelper(answer, que);
+        return answer;
     }
 };
 
@@ -79,7 +69,7 @@ int main()
     node20->right = node7;
 
     Solution obj;
-    vector<vector<int>> answer = obj.zigzagLevelOrder(node3);
+    vector<vector<int>> answer = obj.levelOrder(node3);
 
     for(vector<int> v : answer)
     {
