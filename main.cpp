@@ -11,34 +11,29 @@ using namespace std;
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int p1 = 0;
+        int maxProfit = 0;
+        int min = numeric_limits<int>::max();
 
-        int maxSellOff = 0;
-        int cheapestValue = numeric_limits<int>::max();
-        while(p1 < prices.size())
+        for(int i = 0; i < prices.size(); i++)
         {
-            if(prices[p1] < cheapestValue)
+            if(prices[i] < min)
+                min = prices[i];
+            else //time to sell!
             {
-                cheapestValue = prices[p1];
-                for(int i = p1; i < prices.size() ; i++)
-                {
-                    if(maxSellOff < prices[i] -prices[p1])
-                        maxSellOff = prices[i] -prices[p1];
-                }
+                if(prices[i] - min > maxProfit)
+                    maxProfit = prices[i] - min;
             }
-            p1++;
         }
-
-        return maxSellOff;
+        return maxProfit;
     }
 };
 
 int main()
 {
     Solution obj;
-    vector<int> input = {7,1,5,3,6,4};
+    // vector<int> input = {7,1,5,3,6,4};
     // vector<int> input = {7,6,4,3,1};
-    // vector<int> input = {1,2};
+    vector<int> input = {1,2};
 
     cout << obj.maxProfit(input) << endl;
 
