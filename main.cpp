@@ -17,30 +17,28 @@ struct TreeNode
 
 class Solution {
 public:
-    vector<vector<int>> levelOrder(TreeNode* root) {
-        vector<vector<int>> answer;
-        if(!root)
-            return answer;
-
-        stack<TreeNode*> stk;
+    vector<int> inorderTraversal(TreeNode* root) {
         TreeNode* node = root;
-        // stk.push(node);
+        stack<TreeNode*> stk;
+        vector<int> answer;
 
         while(!stk.empty() || node != NULL)
         {
-            while(node)
+            while(node) //go left, add node to stack
             {
                 stk.push(node);
-                // cout << node->val << " " ; //preorder print here.
                 node = node->left;
             }
 
-            //node is NULL at this point
+            //node is NULL at this point.
             node = stk.top();
-            cout << node->val << " " ; //inorder print here
             stk.pop();
+            answer.push_back(node->val);
+
             node = node->right;
         }
+        return answer;
+
     }
 };
 
@@ -58,17 +56,11 @@ int main()
     node20->right = node7;
 
     Solution obj;
-    vector<vector<int>> answer = obj.levelOrder(node3);
+    vector<int> answer = obj.inorderTraversal(node3);
 
-    // for(vector<int> v : answer)
-    // {
-    //     for(int n : v)
-    //     {
-    //         cout << n << " ";
-    //     }
-    //     cout << endl;
-    // }
-
+    for(auto v : answer)
+        cout << v << " ";
+    cout << endl;
 
     return 0;
 }
