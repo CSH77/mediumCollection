@@ -15,40 +15,38 @@ struct TreeNode
 
 class Solution {
 public:
-    void preOrder(int count, vector<vector<int>>& v, queue<TreeNode*> que)
+    void levelOrderHelper(int count, vector<vector<int>>& v, queue<TreeNode*>& que )
     {
-        if(!que.empty())
+        if(que.empty())
+            return;
+
+        vector<int> localLevelOrderValue;
+        queue<TreeNode*> localLevelNodes;
+        while(!que.empty())
         {
-            queue<TreeNode*> q1;
-            vector<int> tempVec;
-
-            while(!que.empty())
-            {
-                TreeNode* node = que.front();
-                tempVec.push_back(node->val);
-                que.pop();
-
-                if(node->left != NULL)
-                    q1.push(node->left);
-
-                if(node->right != NULL)
-                    q1.push(node->right);
-            }
-
-            if(count % 2 != 0) //reverse output
-            {
-                reverse(tempVec.begin(), tempVec.end());
-                v.push_back(tempVec);
-            }
-            else
-            {
-                v.push_back(tempVec);
-            }
-
-            preOrder(count + 1, v, q1);
+            TreeNode* node = que.front();
+            que.pop();
+            localLevelOrderValue.push_back(node->val);
+            if(node->left)
+                localLevelNodes.push(node->left);
+            if(node->right)
+                localLevelNodes.push(node->right);
         }
 
+        if(count % 2 == 0)
+        {
+            v.push_back(localLevelOrderValue);
+            levelOrderHelper(count + 1, v, localLevelNodes);
+        }
+        else
+        {
+            //reverse
+            reverse(localLevelOrderValue.begin(), localLevelOrderValue.end() );
+            v.push_back(localLevelOrderValue);
+            levelOrderHelper(count + 1, v, localLevelNodes);
+        }
     }
+
 
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
 
@@ -57,7 +55,7 @@ public:
         {
             queue<TreeNode*> que;
             que.push(root);
-            preOrder(0, v, que);
+            levelOrderHelper(0, v, que);
         }
 
         return v;
