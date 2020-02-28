@@ -27,18 +27,13 @@ public:
     void getCombination(string comb, string digits)
     {
         if(digits.size() == 0)
-        {
-            // answer.insert(answer.end(), comb);
             answer.push_back(comb);
-        }
-        else
+
+        for(int i = 0; i < mmap[digits.substr(0,1) ].size(); i++) //iterator map values
         {
-            for(int i = 0; i < mmap[ digits.substr(0, 1) ].size(); i++ )
-            {
-                string temp = comb + mmap[digits.substr(0,1)][i];
-                string d = digits.substr(1);
-                getCombination(temp, d);
-            }
+            string temp = comb + mmap[ digits.substr(0,1) ][i];
+            string d = digits.substr(1);
+            getCombination(temp, d);
         }
     }//getCombination
 
@@ -66,7 +61,3 @@ int main()
 
     return 0;
 }
-
-
-
-
