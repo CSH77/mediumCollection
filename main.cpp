@@ -12,13 +12,10 @@ public:
             return;
 
         if(open == close && close == max)
-        {
             answer.push_back(cur);
-        }
 
         backTrack(answer, cur + "(", open + 1, close, max);
-        backTrack(answer, cur + ")", open, close + 1, max);
-
+        backTrack(answer, cur + ")", open, close+ 1, max);
     }
 
 
