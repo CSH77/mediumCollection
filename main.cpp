@@ -8,19 +8,16 @@ using namespace std;
 class Solution {
 public:
     void sortColors(vector<int>& nums) {
-        int cur = 0, p1 = 0;
-        int p2 = nums.size() - 1;
+        int cur = 0;
+        int left =0;
+        int right = nums.size() - 1;
 
-        while(cur <= p2)
+        while(cur <= right)
         {
             if(nums[cur] == 0)
-            {
-                swap(nums[cur++], nums[p1++]);
-            }
+                swap(nums[cur++], nums[left++]);
             else if(nums[cur] == 2)
-            {
-                swap(nums[cur], nums[p2--]);
-            }
+                swap(nums[cur], nums[right--]);
             else
                 cur++;
         }
