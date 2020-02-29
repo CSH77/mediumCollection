@@ -7,73 +7,66 @@ using namespace std;
 
 class Solution {
 public:
-
-    vector<vector<int>> answer;
-
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        if(intervals.size() < 1)
+        // vector<vector<int>> answer;
+        //sort by first element
+        if(intervals.empty())
             return intervals;
 
-        //sort interval by its first element.
-        vector<pair<int,int>> temp;
-        for(int i = 0; i < intervals.size(); i++)
-        {
-            temp.push_back(make_pair(intervals[i][0], intervals[i][1]));
-        }
 
-        //sort temp vector by its first element
-        auto comp = [](pair<int,int>& a, pair<int,int>& b){
-            return a.first < b.first;
+        auto comp = [](vector<int>& a, vector<int>& b){
+            return a[0] < b[0];
         };
 
-        sort(temp.begin(), temp.end(), comp);
-        //copy back to original
-        intervals.clear();
+        sort(intervals.begin(), intervals.end(), comp);
 
-        for(int i = 0; i < temp.size(); i++)
+        // for(vector<int> n : intervals)
+        // {
+        //     cout << n[0] << ":" << n[1] << " ";
+        // }
+        // cout << endl;
+
+        int cur = 0;
+        int next = 0;
+        while(next < intervals.size())
         {
-            intervals.push_back({temp[i].first, temp[i].second});
-        }
+            //check if intervals is overrapping
+            vector<int> first = intervals[cur];
+            vector<int> second = intervals[next];
 
-
-        vector<vector<int>> answer;
-        answer.push_back(intervals[0]);
-        int answerIndex = 0;
-        for(int i = 0; i < intervals.size(); i++)
-        {
-            if (  (intervals[i][0] >= answer[answerIndex][0] && intervals[i][0] <= answer[answerIndex][1]) ||
-                  (intervals[i][1] >= answer[answerIndex][0] && intervals[i][1] <= answer[answerIndex][1]) ||
-                  (answer[answerIndex][0] >= intervals[i][0] && answer[answerIndex][0] <= intervals[i][1]) ||
-                  (answer[answerIndex][1] >= intervals[i][0] && answer[answerIndex][1] <= intervals[i][1])
-                ) //overlap, merge
+            int newLeft = 0;
+            int newRight = 0;
+            if(first[1] >= second[0]) //overrapping, merge required
             {
-                //decide min
-                int min = (intervals[i][0] < answer[answerIndex][0]) ? intervals[i][0] : answer[answerIndex][0];
+                if(first[1] <= second[1])
+                    newRight = second[1];
+                else
+                    newRight = first[1];
 
-                //decide max
-                int max = (intervals[i][1] > answer[answerIndex][1]) ? intervals[i][1] : answer[answerIndex][1];
-
-                vector<int> temp;
-                temp.push_back(min);
-                temp.push_back(max);
-                answer.pop_back();
-                answer.push_back(temp);
+                //merge two element
+                newLeft = first[0];
+                // answer.push_back(vector<int>{newLeft, newRight});
+                intervals[cur][0] = newLeft;
+                intervals[cur][1] = newRight;
+                next = next + 1;
             }
-            else //does not overlap.. just add from interval.
+            else //two elements are not orverraped,
             {
-                answer.push_back(intervals[i]);
-                answerIndex++;
+                // answer.push_back(intervals[i - 1]);
+                cur++;
+                intervals[cur] = intervals[next];
             }
-        }
 
+        }
+        vector<vector<int>> answer(intervals.begin(), intervals.begin() + cur + 1);
         return answer;
     }
 };
 
 int main()
 {
-    vector<vector<int>> input = {{1,3},{2,6},{8,10},{15,18}};
-
+    // vector<vector<int>> input = {{1,3},{2,6},{8,10},{15,18}};
+    vector<vector<int>> input = {{1,4},{0,4}};
     Solution obj;
     vector<vector<int>> answer = obj.merge(input);
 
