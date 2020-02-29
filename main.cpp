@@ -10,10 +10,10 @@ class Solution {
 public:
     bool exist(vector<vector<char>>& board, string word)
     {
-        if(board.size()==0 || board[0].size()==0 )
+        if(board.size() == 0 || board[0].size() == 0 )
             return true;
 
-        for(int i=0; i<board.size(); i++)
+        for(int i = 0; i < board.size(); i++)
         {
             for(int j=0; j<board[0].size(); j++)
             {
@@ -24,24 +24,24 @@ public:
         return false;
     }
 
-    bool check(vector<vector<char>>& board, string word, int i, int j){
+    bool check(vector<vector<char>>& board, string word, int row, int col){
         if(word.length() == 0)
             return true;
 
-        if(i < 0 || j < 0 || i >= board.size() || j>= board[0].size())
+        if(row < 0 || col < 0 || row >= board.size() || col >= board[0].size())
             return false;
 
-        if(word[0] == board[i][j])
+        if(word[0] == board[row][col])
         {
             char c = word[0];
-            board[i][j]='\0';
-            if( check(board, word.substr(1), i+1, j)||
-                check(board, word.substr(1), i-1, j)||
-                check(board, word.substr(1), i, j+1)||
-                check(board, word.substr(1), i, j-1)
-              )
-                return true;
-            board[i][j] = c;
+            board[row][col]='\0'; //mark as visited
+            if( check(board, word.substr(1), row + 1, col) ||
+                check(board, word.substr(1), row - 1, col) ||
+                check(board, word.substr(1), row, col + 1) ||
+                check(board, word.substr(1), row, col - 1)
+              ) return true;
+
+            board[row][col] = c; //restore original
         }
         return false;
     }
