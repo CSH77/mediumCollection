@@ -7,38 +7,60 @@ using namespace std;
 
 class Solution {
 public:
-    int binarySearch(vector<int>& nums, int l, int r, int target)
+    int findLow(vector<int>& nums, int target)
     {
-        if(l > r)
-            return -1;
+        int left = 0;
+        int right = nums.size();
 
-        int mid = (l + r) / 2;
-        if(nums[mid] == target)
-            return mid;
-        else if(nums[mid] > target)
-            return binarySearch(nums, l, mid - 1, target);
-        else
-            return binarySearch(nums, mid + 1, r, target);
+        while(left < right)
+        {
+            int mid = (left + right) / 2;
+            if(nums[mid] >= target) //go left
+                right = mid;
+            else
+                left = mid + 1;
 
+            if(left == right && nums[left] == target)
+                return left;
+        }
+
+        return -1;
     }
 
+    int findHigh(vector<int>& nums, int target)
+    {
+        int left = 0;
+        int right = nums.size();
+        bool found = false;
+
+        while(left < right)
+        {
+            int mid = (left + right) / 2;
+            if(nums[mid] <= target) //go right
+            {
+                left = mid + 1;
+
+                if(nums[mid] == target)
+                    found = true;
+            }
+            else //go left
+                right = mid;
+
+            if(left == right && found)
+                return left - 1;
+
+        }
+        return -1;
+    }
+
+
     vector<int> searchRange(vector<int>& nums, int target) {
+
         vector<int> answer;
-        int result = binarySearch(nums, 0, nums.size() - 1, target);
-
-        if( result == -1)
-            return vector<int>{-1, -1};
-
-        int start = result;
-        while(start >= 0 && nums[start] == target)
-            start--;
-        answer.push_back( start + 1);
-
-        start = result;
-        while(start < nums.size() && nums[start] == target)
-            start++;
-
-        answer.push_back(start - 1);
+        int left = findLow(nums, target);
+        int right = findHigh(nums, target);
+        answer.push_back(left);
+        answer.push_back(right);
 
         return answer;
     }
@@ -46,9 +68,10 @@ public:
 
 int main()
 {
-    vector<int> input = {5,7,7,8,8,8,10,10,10,11,11,11};
+    // vector<int> input = {5,7,7,8,8,8,10,10,10,11,11,11};
+    vector<int> input = {2,2};
     Solution obj;
-    vector<int> answer = obj.searchRange(input, 11);
+    vector<int> answer = obj.searchRange(input, 3);
 
     for(int n : answer)
         cout << n << " ";
