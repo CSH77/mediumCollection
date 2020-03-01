@@ -1,6 +1,7 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 class Solution {
@@ -9,23 +10,25 @@ public:
         if(nums.size() < 1)
             return 0;
 
-        vector<int> vec(nums.size(), 1);
+        vector<int> answer(nums.size(), 1);
 
-        int longest = 1;
-        for(int i = 0; i < nums.size(); i++)
+        for(int i = 1; i < nums.size(); i++)
         {
             for(int j = 0; j < i; j++)
             {
-                if(nums[i] > nums[j])
-                {
-                    if(vec[i] < vec[j] + 1)
-                        vec[i] = vec[j] + 1;
-
-                    longest = max(vec[i], longest);
-                }
+                if(nums[j] < nums[i]) //subsequence
+                    answer[i] = max(answer[i], answer[j] + 1);
             }
         }
-        return longest;
+
+        //sort vector to find maximum number.
+        auto comp = [](int a, int b){
+            return a > b;
+        };
+        sort(answer.begin(), answer.end(), comp);
+
+        return answer[0];
+
     }
 };
 
