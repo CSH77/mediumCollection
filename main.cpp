@@ -26,7 +26,11 @@ public:
             else if(s[i] == ')') //find matching parenthesis
             {
                 if(rec.empty()) //no matching parenthesis, this position need to be deleted.
-                    s[i] = '*'; //makr with * to delete this position later
+                {
+                    // s[i] = '*'; //makr with * to delete this position later
+                    s.erase(i, 1);
+                    i--;
+                }
                 else
                     rec.pop();
             }
@@ -37,18 +41,19 @@ public:
         {
             Element temp = rec.top();
             rec.pop();
-            s[temp.position] = '*';
+            // s[temp.position] = '*';
+            s.erase(temp.position, 1);
         }
 
-        string answer;
+        // string answer;
 
-        for(int i = 0; i < s.size(); i++)
-        {
-            if(s[i] != '*')
-                answer = answer + s[i];
-        }
+        // for(int i = 0; i < s.size(); i++)
+        // {
+        //     if(s[i] != '*')
+        //         answer = answer + s[i];
+        // }
 
-        return answer;
+        return s;
 
     }
 };
@@ -60,6 +65,7 @@ int main()
     // string input = "lee(t(c)o)de)";
     // string input = "a)b(c)d";
     string input = "(a(b(c)d)";
+    // string input = "))((";
 
 
     string answer = obj.minRemoveToMakeValid(input);
