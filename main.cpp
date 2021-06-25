@@ -2,44 +2,47 @@
 #include <set>
 #include <vector>
 #include <algorithm>
+
 using namespace std;
 
 class Solution {
 public:
-    int lengthOfLIS( vector<int>& nums ) {
-        if(nums.size() < 1)
-            return 0;
-
-        vector<int> answer(nums.size(), 1);
-
-        for(int i = 1; i < nums.size(); i++)
+    int lengthOfLongestSubstring(string s)
+    {
+        set<char> myset;
+        string currentStr = "";
+        int maxLength = 0;
+        for(int i = 0; i < s.length(); i++)
         {
-            for(int j = 0; j < i; j++)
+            auto search = myset.find(s.at(i));
+            if(search != myset.end())
             {
-                if(nums[j] < nums[i]) //subsequence
-                    answer[i] = max(answer[i], answer[j] + 1);
+                size_t pos = currentStr.find( s.at(i) );
+                currentStr = currentStr.substr(pos + 1);
+                currentStr = currentStr + s.at(i);
             }
-        }
+            else
+            {
+                currentStr = currentStr + s.at(i);
+                myset.insert(s.at(i));
+            }
 
-        //sort vector to find maximum number.
-        auto comp = [](int a, int b){
-            return a > b;
-        };
-        sort(answer.begin(), answer.end(), comp);
+            maxLength = max(maxLength, int(currentStr.length()) );
+        }  
 
-        return answer[0];
+        
 
+        return maxLength;
     }
-};
 
+};
 int main()
 {
-    // vector<int> input = {10,9,2,5,3,7,101,18}; //expect 4   {2,3,7,101}
-    vector<int> input = {3,4,-1, 0, 6, 2, 3}; //expect  4   {-1, 0, 2, 3}
-
+    // string input = "pwwkew"; //expect The answer is "wke", with the length of 3.
+    // string input = "abcabcbb";//  The answer is "abc", with the length of 3.
+    string input = "dvdf"; //expect 3
     Solution obj;
-    cout << obj.lengthOfLIS(input);
-
+    cout << obj.lengthOfLongestSubstring(input);
 
     return 0;
 }
