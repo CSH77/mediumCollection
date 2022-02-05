@@ -11,52 +11,39 @@ class Solution {
 public:
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
 
-        if(strs.empty())
-            return vector<vector<string>>{};
-
-        // if(strs.size() < 1)
-        //     return vector<vector<string>>{};
-
-        vector<vector<string>> answer;
-
-        multimap<string, string> mmap;
-
+        map<string, vector<string>> anagramsGroup;
         for(int i = 0; i < strs.size(); i++)
         {
-            //find total value of string.
-            // int total =  0;
-            // for(auto c : strs[i])
-            //     total += c;
+            string word = strs[i];
+            //sort word, use it as a key.
+            sort(word.begin(), word.end());
 
-            // mmap.insert(make_pair(total, strs[i]));
-            //sort string before use it as a key.
-            string curStringKey = strs[i];
-            sort(curStringKey.begin(), curStringKey.end());
-            mmap.insert(make_pair(curStringKey, strs[i]));
-        }
-
-        string key = "000";
-        for( auto iter = mmap.begin(); iter != mmap.end(); iter++)
-        {
-
-            if(iter->first != key)
+            //if word is in anagramGroup, add it.
+            auto search = anagramsGroup.find(word);
+            if(search != anagramsGroup.end()) //the word is in the database, add more.
             {
-                vector<string> strVec;
-                key = iter->first;
-                typedef multimap<string, string>::iterator rangeIter;
-                pair<rangeIter, rangeIter> result = mmap.equal_range(key);
-
-                for(rangeIter it = result.first; it != result.second; it++)
-                {
-                    strVec.push_back(it->second);
-                }
-
-                //push to answer vector
-                answer.push_back(strVec);
+                search->second.push_back(strs[i]);
+            }
+            else //not exist, add as new
+            {
+                vector<string> temp;
+                temp.push_back(strs[i]);
+                anagramsGroup.insert(make_pair(word, temp));
             }
         }
 
-        return answer;
+        vector<vector<string>> answser;
+        for(auto item : anagramsGroup)
+        {
+            vector<string> stringGroup;
+            for(auto subitem : item.second)
+            {
+                stringGroup.push_back(subitem);
+            }
+            answser.push_back(stringGroup);
+        }
+
+        return answser;
     }
 };
 
