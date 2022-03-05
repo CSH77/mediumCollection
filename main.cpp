@@ -1,44 +1,52 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <map>
+#include <queue>
+#include <stack>
 #include <limits>
+
 
 using namespace std;
 
 class Solution {
 public:
     bool increasingTriplet(vector<int>& nums) {
+        int first = numeric_limits<int>::max();
+        int second = numeric_limits<int>::max();
+        int third = numeric_limits<int>::max();
 
-        if(nums.size() < 2)
-            return false;
-
-        int low = nums[0];
-        int mid = numeric_limits<int>::max();
-
-        for(int i = 1; i < nums.size(); i++)
+        for (int i = 0; i < nums.size(); i++)
         {
-            if(nums[i] > mid) //found number that is bigger than mid, triplet found
+            int currentValue = nums[i];
+            if(currentValue <= first) //smallest number.
+            {
+                first = currentValue;
+            }
+            else if(currentValue <= second)
+            {
+                second = currentValue;
+            }
+            else // current is bigger than both first and second, found triplet.
+            {
+                cout << first << " " << second << " " << currentValue << endl;
                 return true;
-
-            if(nums[i] < low ) //update low
-                low = nums[i];
-
-            if(nums[i] > low && nums[i] < mid) //update mid
-                mid = nums[i];
+            }
         }
-
         return false;
     }
 };
 
 int main()
 {
-    // vector<int> input = {1,2,3,4,5}; //true
-    vector<int> input = {5,4,3,2,1}; //false
-    // vector<int> input = {5,1,5,5,2,5,4}; //expect true
+    vector<int> nums = {2,1,5,0,4,6};
+    // vector<int> nums = {5,4,3,2,1};
+    // vector<int> nums = {20,100,10,12,5,13};
+
 
     Solution obj;
-    cout << obj.increasingTriplet(input) << endl;
+    cout << obj.increasingTriplet(nums);
+
 
     return 0;
 }
