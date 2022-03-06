@@ -11,58 +11,21 @@ struct ListNode {
 };
 
 
+//time O(N + M)
+//space O(1)
 class Solution {
 public:
-    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+    ListNode* getIntersectionNode(ListNode *headA, ListNode *headB) {
 
         ListNode* iterA = headA;
         ListNode* iterB = headB;
 
-        int sizeA = 0, sizeB = 0;
-
-        while(iterA != NULL)
+        while(iterA != iterB)
         {
-            iterA = iterA->next;
-            sizeA++;
+            iterA = iterA == nullptr ? headB : iterA->next;
+            iterB = iterB == nullptr ? headA : iterB->next;
         }
-        while(iterB != NULL)
-        {
-            iterB = iterB->next;
-            sizeB++;
-        }
-
-        iterA = headA;
-        iterB = headB;
-
-        if(sizeA > sizeB)
-        {
-            int diff = sizeA - sizeB;
-
-            for(int i = 0; i < diff; i++)
-            {
-                iterA = iterA->next;
-            }
-        }
-        else if(sizeA < sizeB)
-        {
-            int diff = sizeB - sizeA;
-
-            for(int i = 0; i < diff; i++)
-            {
-                iterB = iterB->next;
-            }
-        }
-
-        while(iterA != NULL && iterB != NULL)
-        {
-            if(iterA == iterB)
-                return iterA;
-
-            iterA = iterA->next;
-            iterB  = iterB->next;
-        }
-
-        return NULL;
+        return iterA;
     };
 };
 
