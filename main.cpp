@@ -12,44 +12,41 @@ struct ListNode {
 class Solution {
 public:
     ListNode* oddEvenList(ListNode* head) {
-        ListNode* currentPtr = head;
-        ListNode* oddPtrHead = new ListNode(0);
-        ListNode* evenPtrHead = new ListNode(0);
-        ListNode* oddPtr = oddPtrHead;
-        ListNode* evenPtr = evenPtrHead;
+        ListNode* oddNodeHead = new ListNode(0);
+        ListNode* evenNodeHead = new ListNode(0);
+
+        ListNode* oddNode = oddNodeHead;
+        ListNode* evenNode = evenNodeHead;
+        ListNode* current = head;
 
         int count = 1;
-        while(currentPtr != NULL)
+        while(current)
         {
-            if(count % 2 == 0)
+            //odd Node
+            if(count % 2 != 0)
             {
-                evenPtr->next = currentPtr;
-                evenPtr = evenPtr->next;
-                // evenPtr->next = NULL;
+                oddNode->next = current;
+                oddNode = oddNode->next;
             }
             else
             {
-                oddPtr->next = currentPtr;
-                oddPtr = oddPtr->next;
-                // oddPtr->next = NULL;
+                evenNode->next = current;
+                evenNode = evenNode->next;
             }
+
+            current = current->next;
             count++;
-            currentPtr = currentPtr->next;
         }
-        evenPtr->next = NULL;
-        oddPtr->next = NULL;
+        evenNode->next = nullptr;
+        oddNode->next = nullptr;
 
-        ListNode* delNode = evenPtrHead;
-        evenPtrHead = evenPtrHead->next;
-        delete delNode;
+        oddNode->next = evenNodeHead->next; //add even and odd together
+        delete evenNodeHead;
 
-        oddPtr->next = evenPtrHead; //add odd and even together
+        oddNode = oddNodeHead->next;
+        delete oddNodeHead;
+        return oddNode;
 
-        delNode = oddPtrHead;
-        oddPtrHead = oddPtrHead->next;
-        delete delNode;
-
-        return oddPtrHead;
     }
 };
 
