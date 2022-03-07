@@ -28,28 +28,29 @@ struct TreeNode {
 
 class Solution {
 public:
-    stack<TreeNode*> stk;
-    vector<int> vec;
-
     vector<int> inorderTraversal(TreeNode* root) {
 
-        TreeNode* node = root;
-        while(node != NULL  || !stk.empty())
+        TreeNode* treeNode = root;
+        vector<int> treeNodeValueVec;
+        stack<TreeNode*> stk;
+
+        while(treeNode || !stk.empty() )
         {
-            while(node != NULL)
+            while(treeNode)
             {
-                stk.push(node);
-                node = node->left;
+                stk.push(treeNode);
+                treeNode =treeNode->left;
             }
 
-            node = stk.top();
+            treeNode = stk.top();
+            treeNodeValueVec.push_back(treeNode->val);
             stk.pop();
-            vec.push_back(node->val);
-            node = node->right;
-        }
-        return vec;
-    }
 
+            treeNode = treeNode->right;
+        }
+
+        return treeNodeValueVec;
+    }
 };
 
 int main()
