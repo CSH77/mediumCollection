@@ -16,33 +16,32 @@ struct TreeNode {
 class Solution {
 public:
     int kthSmallest(TreeNode* root, int k) {
-
-        //use inorder to find kth smallest element in a BST
         TreeNode* node = root;
+
         stack<TreeNode*> stk;
+        //stk.push(root);
+
         int count = 1;
 
-        //stack<TreeNode*> numStk;
-
-        while(node != NULL || !stk.empty())
+        while(node || !stk.empty())
         {
-            while(node != NULL)
+            while(node)
             {
                 stk.push(node);
                 node = node->left;
             }
 
-            //node is null at this point
             node = stk.top();
             stk.pop();
 
             if(count == k)
                 return node->val;
+
+            node = node->right;
             count++;
 
-            //take care right subtree
-            node = node->right;
         }
+
         return 0;
     }
 };
