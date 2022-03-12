@@ -18,43 +18,31 @@ struct TreeNode {
 class Solution {
 public:
     TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
-        bool nextOneIsSuccesor = false;
-
-        //use inorder iteration, if current node is p,
-        //next node is successor,
-
-        stack<TreeNode*> stk;
         TreeNode* node = root;
-        while(!stk.empty() || node != NULL)
+        stack<TreeNode*> stk;
+        // stk.push(node);
+        bool nextNodeIsSuccessor = false;
+        while(!stk.empty() || node)
         {
             while(node)
             {
                 stk.push(node);
                 node = node->left;
             }
-            //node is null at this point.
 
             node = stk.top();
             stk.pop();
 
-            if(nextOneIsSuccesor)
-            {
-                // cout << "successor value: " << node->val << endl;
+            if(nextNodeIsSuccessor)
                 return node;
-            }
 
-            if(node->val == p->val) //next one is answer;
-            {
-                nextOneIsSuccesor = true;
-                // cout << "found node: " << node->val << endl;
-                // cout << "next node: " << node->right << endl;
-            }
+            if(node == p)
+                nextNodeIsSuccessor = true;
 
             node = node->right;
         }
 
-        return NULL;
-
+        return nullptr;
     }
 };
 
