@@ -1,52 +1,52 @@
 #include <iostream>
-#include <vector>
 #include <set>
+#include <vector>
+#include <map>
+#include <queue>
+#include <stack>
+
 using namespace std;
 
 class Solution {
 public:
-    vector<vector<int>> subsets(vector<int>& nums)
-    {
-        vector<vector<int>> vv;
-        vector<int> v;
-
-        if (nums.size() == 0)
-            return vv;
-
-        PowerSet(vv, v, nums, 0);
-
-        return vv;
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> answer;
+        vector<int> current;
+        backtrack(answer, nums, current, 0);
+        return answer;
     }
 
-    void PowerSet(vector<vector<int>>& vv, vector<int>& v,vector<int>& nums, int begin) {
-
-        vv.push_back(v);
-
-        for(int i = begin; i < nums.size(); i++)
+    void backtrack(vector<vector<int>>& answer, vector<int>& nums, vector<int> cur, int index)
+    {
+        answer.push_back(cur);
+        for(int i = index; i < nums.size(); i++)
         {
-            v.push_back(nums[i]);
-            PowerSet(vv, v, nums, i+1);
-            v.pop_back();
+            vector<int> temp = cur;
+            temp.push_back(nums[i]);
+            backtrack(answer, nums, temp, i + 1);
         }
+
+        return;
     }
 };
-
 int main()
 {
-    vector<int> input = {1,2,3};
     Solution obj;
+    vector<int> input = {1,2,3};
 
     vector<vector<int>> answer = obj.subsets(input);
 
-    for(vector<int> v : answer)
+    for(auto item : answer)
     {
-        for(int n : v)
-            cout <<  n << " ";
-        cout << endl;
+        for(auto subItem : item)
+        {
+            cout << subItem <<" ";
+        }
+        cout << " ,    ";
     }
-
 
     return 0;
 }
+
 
 
