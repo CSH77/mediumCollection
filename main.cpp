@@ -14,39 +14,46 @@ public:
         if(intervals.empty())
             return 0;
 
-        //sort by first
+        //sort by first.
         auto comp = [](vector<int>& a, vector<int>& b){
             return a[0] < b[0];
         };
         sort(intervals.begin(), intervals.end(), comp);
 
-        //use priority_que que holds end time of each room, check if starting time is conflict with end time
-        priority_queue<int, vector<int>, greater<int>> pque;
-        pque.push(intervals[0][1]); //push end time
+        auto compEnd = [](vector<int>& a, vector<int>& b){
+            return a[1] > b[1];
+        };
+        //usg priority queue sorted by end meeting time.
+        priority_queue< vector<int>, vector<vector<int>>, decltype(compEnd)> pque(compEnd);
+
+        pque.push(intervals[0]);
 
         for(int i = 1; i < intervals.size(); i++)
         {
-            int roomOccupiedEndTime = pque.top();
-            int roomToReserveStartTime = intervals[i][0];
-            if(roomOccupiedEndTime <= roomToReserveStartTime) //now room is free to use
+            vector<int> currentInterval = intervals[i];
+            vector<int> tempQue = pque.top();
+            if( currentInterval[0] >= tempQue[1] ) //meeting room is free to use.
             {
                 pque.pop();
-                pque.push(intervals[i][1]); //reseve with end time
+                pque.push(currentInterval);
             }
-            else  //room is not free yet, need another room
+            else
             {
-                pque.push(intervals[i][1]);
+                pque.push(currentInterval);
             }
         }
+
         return pque.size();
+
     }
 };
 
 int main()
 {
-    vector<vector<int>> input = {{0, 30},{5, 10},{15, 20}}; //expect 2
+    // vector<vector<int>> input = {{0, 30},{5, 10},{15, 20}}; //expect 2
     // vector<vector<int>> input = {{7,10},{2,4}}; //expect 1
     // vector<vector<int>> input = {{13,15},{1,13}}; //expect 1
+    vector<vector<int>> input = {{1, 100},{20, 40},{50, 60}}; //expect 2
 
     Solution obj;
     cout << obj.minMeetingRooms(input);
