@@ -8,28 +8,27 @@ using namespace std;
 class Solution {
 public:
     bool isHappy(int n) {
-        unordered_set<int> s;
+        unordered_set<int> sset;
         while(1)
         {
-            long long sum = 0;
+            long long total = 0;
             while(n)
             {
                 int digit = n % 10;
-                sum = sum + digit * digit;
+                total += (digit * digit);
                 n = n / 10;
             }
-            if(sum == 1)
+
+            if(total == 1)
                 return true;
-            else if(s.find(sum) != s.end())
-            {
+            else if(sset.find(total) != sset.end())
                 return false;
-            }
             else
             {
-                s.insert(sum);
-                n = sum;
+                sset.insert(total);
+                n = total;
             }
-       }//while
+        }//while
    }//EOF
 };
 
