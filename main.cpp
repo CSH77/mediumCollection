@@ -14,24 +14,32 @@ public:
             return a.second < b.second;
         };
 
+        pair<int,int> answerPair = make_pair(nums[0],1); //second as count, first as index
+
         map<int, int> mymap;
         for(auto item : nums)
         {
             auto search = mymap.find(item);
             if(search != mymap.end()) //exist, add count
+            {
                 search->second++;
+                if(search->second > answerPair.second)
+                    answerPair = make_pair(search->first, search->second);
+            }
             else //add new
                 mymap.insert(make_pair(item, 1));
         }
 
         //find most frequent Element by sorting.
         //sort map by 2nd element.
-        priority_queue<pair<int,int>, vector<pair<int,int>>, decltype(comp)> pque(comp);
+        // priority_queue<pair<int,int>, vector<pair<int,int>>, decltype(comp)> pque(comp);
 
-        for(auto item : mymap)
-            pque.push(make_pair(item.first, item.second));
+        // for(auto item : mymap)
+        //     pque.push(make_pair(item.first, item.second));
 
-        return pque.top().first;
+        // return pque.top().first;
+
+        return answerPair.first;
 
     }
 };
