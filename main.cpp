@@ -9,16 +9,33 @@ using namespace std;
 /* The knows API is defined for you.
       bool knows(int a, int b); */
 
+bool knows(int a, int b){
+    return true;
+};
+
 class Solution {
 public:
     int numberOfPeople;
     int findCelebrity(int n) {
         numberOfPeople = n;
-        for(int i = 0; i < n; i++){
-            if( isCelebrity(i))
-                return i;
+
+        int possibleCelebrity = 0;
+
+
+        for(int i = 0; i < n; i++)
+        {
+            if(knows(possibleCelebrity, i)) //possibleCelebrity is i now.
+                possibleCelebrity = i;
+            //else //next will be possible celebrity
+
         }
-        return -1;
+        if( isCelebrity(possibleCelebrity))
+            return possibleCelebrity
+        else
+            return -1;
+
+        //check possible celebrity if the celebrity is real.
+        // return isCelebrity(possibleCelebrity) ? true : -1;
     }
 
     bool isCelebrity(int i)
