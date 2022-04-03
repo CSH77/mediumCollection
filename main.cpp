@@ -22,24 +22,37 @@ public:
         if(que.empty())
             return;
 
-        vector<int> levelValue;
-        queue<TreeNode*> levelQue;
+        // levelVec.push_back(que.front());
+        // que.pop();
+        answer.push_back( vector<int>{que.front()->val} );
+
         while(!que.empty())
         {
-            TreeNode* cur = que.front();
-            que.pop();
-            levelValue.push_back(cur->val);
+            vector<int> levelAnswer;
+            vector<TreeNode*> levelVec;
+            while(!que.empty())
+            {
+                if(que.front())
+                {
+                    if(que.front()->left) //left
+                    {
+                        levelVec.push_back(que.front()->left);
+                        levelAnswer.push_back(que.front()->left->val);
+                    }
 
-            if(cur->left)
-                levelQue.push(cur->left);
-
-            if(cur->right)
-                levelQue.push(cur->right);
+                    if(que.front()->right) //right
+                    {
+                        levelVec.push_back(que.front()->right);
+                        levelAnswer.push_back(que.front()->right->val);
+                    }
+                }
+                que.pop();
+            }
+            answer.push_back(levelAnswer);
+            //levelVec to que.
+            for(auto item : levelVec)
+                que.push(item);
         }
-
-        answer.push_back(levelValue);
-        levelOrderHelper(answer, levelQue);
-
     }
 
 
