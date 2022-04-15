@@ -11,22 +11,29 @@ class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
         vector<vector<int>> answer;
+        answer.push_back(vector<int>());
         vector<int> current;
-        backtrack(answer, nums, current, 0);
+        set<int> myset;
+
+        subsetHelper(nums, answer, current, myset);
+
         return answer;
     }
 
-    void backtrack(vector<vector<int>>& answer, vector<int>& nums, vector<int> cur, int index)
+    void subsetHelper(vector<int>& nums, vector<vector<int>>& answer, vector<int> current, set<int> myset)
     {
-        answer.push_back(cur);
-        for(int i = index; i < nums.size(); i++)
+        for (int i = 0; i < nums.size(); i++)
         {
-            vector<int> temp = cur;
-            temp.push_back(nums[i]);
-            backtrack(answer, nums, temp, i + 1);
-        }
+            if (myset.find(nums[i]) != myset.end()) //alrady exist, do not use this number
+                continue;
 
-        return;
+            //never used, use this number
+            myset.insert(nums[i]);
+            subsetHelper(nums, answer, current, myset);
+
+            current.push_back(nums[i]);
+            answer.push_back(current);
+        }
     }
 };
 int main()
