@@ -2,43 +2,42 @@
 #include <vector>
 #include <algorithm>
 #include <set>
+#include <map>
+#include <unordered_set>
 
 using namespace std;
 
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        if(nums.size() <= 2) return {};
-
-        vector<vector<int>>v;
-        sort(nums.begin(), nums.end()); // sort the numbers
-
-        for(int i = 0; i < nums.size() - 2; i++)
+        sort(begin(nums), end(nums));
+        vector<vector<int>> res;
+        for (int i = 0; i < nums.size() && nums[i] <= 0; i++)
         {
-            if(i > 0 && nums[i] == nums[i-1])
-                continue; // to remove duplicates for ith candidate
-
-            int l = i+1, r = nums.size() - 1;
-            while(l < r)
+            if (i == 0 || nums[i - 1] != nums[i])
             {
-                if(nums[i] + nums[l] + nums[r] == 0)
-                {
-                    v.push_back({nums[i], nums[l], nums[r]}); // will automatically contain only unique triplets
-                    l++;
-                    r--;
-                    while(l < r && nums[l] == nums[l-1])
-                        l++; // remove duplicates and move to right
-
-                    while(l < r && nums[r] == nums[r+1])
-                        r--; // remove duplicates and move to left
-                }
-                else if(nums[i] + nums[l] + nums[r] > 0)
-                    r--; // our sum exceeds 0, we will have to decrement 'r' so as to make the sum approach to 0
-                else
-                    l++; // our sum is less than 0, increment 'l' so as to make sum approach to 0
+                twoSum(nums, i, res);
             }
         }
-        return v;
+        return res;
+    }
+
+    void twoSum(vector<int>& nums, int i, vector<vector<int>> &res)
+    {
+        unordered_set<int> seen;
+        for (int j = i + 1; j < nums.size(); j++)
+        {
+            int complement = -( nums[i] + nums[j] );
+            if (seen.count(complement) != 0) //the number is in database
+            {
+                res.push_back({nums[i], complement, nums[j]});
+                while (  j + 1 < nums.size() && nums[j] == nums[j + 1])
+                {
+                    ++j;
+                }
+            }
+            seen.insert(nums[j]);
+        }
     }
 };
 
