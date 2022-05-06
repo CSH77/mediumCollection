@@ -1,6 +1,7 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <unordered_set>
 
 using namespace std;
 
@@ -8,35 +9,35 @@ class Solution {
 public:
     int lengthOfLongestSubstring(string s)
     {
-        set<char> myset;
-        int stringSize = s.length();
-        int ans = 0, i = 0, j = 0;
+        int maxCount = 0;
+        int count = 0;
+        int i = 0, j = 0;
+        unordered_set<char> uset;
 
-        while(i < stringSize && j < stringSize)
+        while(i < s.size() && j < s.size())
         {
-            auto search = myset.find(s.at(j));
-            if(search == myset.end()) //The char not used,
+            auto search = uset.find(s[j]);
+            if(search != uset.end()) //char is already used
             {
-                //add new char to database
-                myset.insert(s.at(j));
+                //delete char from set.
+                uset.erase(s[i]);
 
-                //update index
+                //update index i
+                i++;
+            }
+            else // char never used before.
+            {
+                //update set
+                uset.insert(s[j]);
                 j++;
 
-                //refresh answer.
-                ans = max(ans, j - i);
-            }
-            else //new char used already.
-            {
-                //remove first char from the database.
-                myset.erase(s.at(i));
-
-                //update index
-                i++;
+                count = j - i;
+                maxCount = max(count, maxCount);
 
             }
         }
-        return ans;
+
+        return maxCount;
     }
 
 };
