@@ -11,29 +11,27 @@ public:
     {
         int maxCount = 0;
         int count = 0;
-        int i = 0, j = 0;
+        int p1 = 0;
+        int p2 = 0;
         unordered_set<char> uset;
 
-        while(i < s.size() && j < s.size())
+        while(p1 < s.size() && p2 < s.size())
         {
-            auto search = uset.find(s[j]);
-            if(search != uset.end()) //char is already used
+            //char is already used
+            if(uset.count(s[p2]) != 0)
             {
-                //delete char from set.
-                uset.erase(s[i]);
-
-                //update index i
-                i++;
+                //remove char from uset
+                uset.erase(s[p1]);
+                p1++;
             }
-            else // char never used before.
+            else //char is never been used
             {
-                //update set
-                uset.insert(s[j]);
-                j++;
+                uset.insert(s[p2]);
+                p2++;
 
-                count = j - i;
+                //update counter
+                count = p2 - p1;
                 maxCount = max(count, maxCount);
-
             }
         }
 
