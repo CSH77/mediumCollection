@@ -4,72 +4,47 @@
 #include <map>
 #include <functional>
 #include <queue>
+#include <unordered_map>
 
 using namespace std;
 
 class Solution {
 public:
 
-    struct CustomCompare
-    {
-        bool operator()(const pair<int,int>& elem1, const pair<int,int>& elem2)
-        {
-                if( elem1.second < elem2.second )
-                    return true;
-                else if (elem1.second == elem2.second)
-                {
-                    if(elem1.first > elem2.first)
-                        return true;
-                    else
-                        return false;
-                }
-                else
-                    return false;
-        }
-    };
-
     vector<int> topKFrequent(vector<int>& nums, int k) {
-        //use hash to keep count of each number.
-        vector<int> answer;
-        map<int,int> mmap;
-        for(int i = 0; i < nums.size(); i++)
+        unordered_map<int, int> umap;
+            for(auto item : nums)
+            {
+                auto search = umap.find(item);
+                if(search != umap.end()) //increase count
+                {
+                    search->second++;
+                }
+                else //first element, insert
+                {
+                    umap.insert(make_pair(item, 1));
+                }
+            }
+
+        auto comp = [](pair<int,int>& a, pair<int,int>& b){
+            return a.second < b.second;
+        };
+
+        //use priority queue sort by element count
+        priority_queue<pair<int,int>, vector<pair<int,int>>, decltype(comp)> pque(comp);
+
+        for(auto item : umap)
         {
-            //exist in data base already?
-            auto search = mmap.find(nums[i]);
-            if(search != mmap.end()) //it exist already, need to count up
-                search->second += 1;
-            else  //does not exist, add with count 1
-                mmap.insert(pair<int,int>(nums[i], 1));
+            pque.push(make_pair(item.first, item.second));
         }
 
-        //hmm.. not working..
-        // //use heap or priority_queue to sort them by occurance and key value
-        // auto comp = [](const pair<int,int>& elem1, const pair<int,int>& elem2){
-        //     if( elem1.second < elem2.second )
-        //         return true;
-        //     else if (elem1.second == elem2.second)
-        //     {
-        //         if(elem1.first > elem2.first)
-        //             return true;
-        //         else
-        //             return false;
-        //     }
-        //     else
-        //         return false;
-        // };
-
-        priority_queue< pair<int,int>, std::vector< pair<int,int> >, CustomCompare> pque;
-        // priority_queue<pair<int,int> , std::vector<pair<int,int> >, decltype(comp)> pque; //not working somehow.
-
-        for(auto m : mmap)
-            pque.push(m);
-
+        vector<int> answer;
         for(int i = 0; i < k; i++)
         {
-            int n = pque.top().first;
+            answer.push_back(pque.top().first);
             pque.pop();
-            answer.push_back(n);
         }
+
         return answer;
     }//EOF
 };
