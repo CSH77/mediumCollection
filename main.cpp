@@ -49,21 +49,21 @@ public:
     }//EOF
 };
 
-int main()
-{
-    // vector<int> input = {1,1,1,2,2,2,3,3,3}; //and 3, expected 1,3,2
-    vector<int> input = {1,1,1,2,2,3}; //and 2, expected 1,3,2
-    // vector<int> input = {1,2};
+// int main()
+// {
+//     // vector<int> input = {1,1,1,2,2,2,3,3,3}; //and 3, expected 1,3,2
+//     vector<int> input = {1,1,1,2,2,3}; //and 2, expected 1,3,2
+//     // vector<int> input = {1,2};
 
-    Solution obj;
-    vector<int> vec = obj.topKFrequent(input, 2);
+//     Solution obj;
+//     vector<int> vec = obj.topKFrequent(input, 2);
 
-    for(int n : vec)
-        cout << n <<" ";
-    cout << endl;
+//     for(int n : vec)
+//         cout << n <<" ";
+//     cout << endl;
 
-    return 0;
-}
+//     return 0;
+// }
 
 
 
