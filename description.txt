@@ -1,2 +1,5 @@
 google test and Cmake
 
+compile with command
+$ g++ main.cpp -o main.out -lgtest -lpthread
+
