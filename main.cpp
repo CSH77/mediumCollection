@@ -8,65 +8,68 @@
 
 using namespace std;
 
-class Solution {
-public:
-    double dfs(unordered_map< string, vector<pair<string, int>> >& umap, vector<string>& queries)
+
+vector<int> sorted;
+
+void merge(vector<int>& vec, int left, int mid, int right)
+{
+    int i, j, k, l;
+    i = left;
+    j = mid + 1;
+    k = left;
+
+    while(i<=mid && j<=right)
     {
-
+        if(vec[i] <= vec[j])
+            sorted[k++] = vec[i++];
+        else
+            sorted[k++] = vec[j++];
     }
 
-    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
-        //construct graph
-        unordered_map< string, vector<pair<string, int>> > umap;
-
-        //find total possible pointsset.insert(to_string(subItem[0]));
-        set<string> sset;
-        for(auto item : equations)
-        {
-            for(auto subItem : item)
-            {
-                sset.insert(subItem);
-            }
-        }
-
-        //cout << sset.size() << endl;
-        for(auto item : sset)
-        {
-            umap.insert(make_pair(item, vector<pair<string, int>>{}));
-        }
-
-        for(int i = 0; i < equations.size(); i++)
-        {
-            //point a to b
-            string pointFrom = equations[i][0];
-            string pointTo = equations[i][1];
-            double distance = values[i];
-            pair<string, int> p = {pointTo, distance};
-            vector<pair<string, int>> temp = umap[pointFrom];
-            temp.push_back(p);
-
-            //point a to b
-            pointFrom = equations[i][1];
-            pointTo = equations[i][0];
-            distance = 1 / values[i];
-            p = {pointTo, distance};
-            temp = umap[pointFrom];
-            temp.push_back(p);
-        }
-
-        return vector<double>{};
+    // 남아 있는 값들을 일괄 복사
+    if(i <= mid)
+    {
+        for(l=i; l<=mid; l++)
+            sorted[k++] = vec[l];
     }
-};
+    // 남아 있는 값들을 일괄 복사
+    else
+    {
+        for(l=j; l<=right; l++)
+            sorted[k++] = vec[l];
+    }
+
+    // 배열 sorted[](임시 배열)의 리스트를 배열 list[]로 재복사
+    for(l=left; l<=right; l++)
+        vec[l] = sorted[l];
+}
+
+
+void mergeSort(vector<int>& vec, int left, int right)
+{
+    if(left < right)
+    {
+        int mid = (left + right) / 2;
+        mergeSort(vec, left, mid);
+        mergeSort(vec, mid + 1 , right);
+        merge(vec, left, mid, right);
+    }
+}
 
 int main()
 {
-    vector<vector<string>> equation = {{"a","b"},{"b","c"}};
-    vector<double> values = {2.0, 3.0};
-    vector<vector<string>> queries = {{"a","c"},{"b","a"},{"a","e"},{"a","a"},{"x","x"}};
 
-    Solution obj;
-    vector<double> anser = obj.calcEquation(equation, values, queries);
+    vector<int> input = {5,8,7,6,4,3,1,10};
 
+    sorted.resize(input.size(), 0);
+
+    mergeSort(input, 0, input.size());
+    // for(auto item : answer)
+    //     cout << item << ", ";
+
+    for(auto item : sorted)
+        cout << item << ", ";
+    cout << endl;
 
 
     return 0;
