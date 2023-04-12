@@ -6,26 +6,22 @@ using namespace std;
 class Solution {
 public:
     vector<vector<int>> answer;
-
-    void permuHelper(vector<int>& num, int l, int r)
-    {
-        if(l == r)
+    void permuHelper(vector<int>& nums, int left, int right){
+        if(left > right)
+            return;
+        if(left == right)
         {
-            vector<int> temp;
-            for(auto n : num)
-                temp.push_back(n);
-
-            answer.push_back(temp);
+            answer.push_back(nums);
             return;
         }
 
-        for(int i = l; i < r; i++)
+        for(int i = left; i < right; i++)
         {
-            swap(num[i], num[l] );
-            permuHelper(num, l + 1, r);
-            swap(num[i], num[l] ); //swap back
+            swap(nums[i], nums[left]);
+            permuHelper(nums, left + 1, right);
+            swap(nums[i], nums[left]);
         }
-    }//EOF
+    }
 
     vector<vector<int>> permute(vector<int>& nums) {
         permuHelper(nums, 0, nums.size());
@@ -46,9 +42,6 @@ int main()
             cout << n << " ";
         cout << endl;
     }
-
-
-
     return 0;
 }
 
